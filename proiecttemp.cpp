@@ -798,7 +798,7 @@ void startHangman(){
     cfi.dwFontSize.Y = 28;                  
     cfi.FontFamily = FF_DONTCARE;
     cfi.FontWeight = FW_NORMAL;
-    std::wcscpy(cfi.FaceName, L"Consolas"); 
+    wcscpy(cfi.FaceName, L"Consolas"); 
     SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
     HWND hWnd = GetConsoleWindow();
     ShowWindow(hWnd,SW_SHOWMAXIMIZED);
@@ -904,7 +904,7 @@ void hangman(){
         back:
         cout<<endl<<"Please introduce a valid letter: "<<endl;
         if(mistakes==5)
-            cout<<"HINT:"<<hint<<endl;
+            cout<<endl<<"YOUR HINT IS : "<<hint<<endl<<endl;
         cout<<"</menu/hangman/>";
         char citit;
         cin>>citit;
@@ -1047,7 +1047,7 @@ void startConsole(){
     cfi.dwFontSize.Y = 32;                  
     cfi.FontFamily = FF_DONTCARE;
     cfi.FontWeight = FW_NORMAL;
-    std::wcscpy(cfi.FaceName, L"Consolas"); 
+    wcscpy(cfi.FaceName, L"Consolas"); 
     SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
     HWND hWnd = GetConsoleWindow();
     ShowWindow(hWnd,SW_SHOWMAXIMIZED);
