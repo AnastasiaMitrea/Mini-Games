@@ -10,7 +10,7 @@ void wordRandomize(char randomWord[], char randomSave[], char randomHint[]);
 char strindex(char* str, int index);
 int strpoz(char* str, char lit);
 void startHangman();
-void draw(int mistakes, char* sent1, char* alph, char* sent2, char* save, int indexLitera, char citit, char* negative, char* affirmative, char*word, bool guessed);
+void draw(int mistakes, char* sent1, char* alph, char* sent2, char* save, int indexLitera, char citit, char* negative, char* affirmative, char*word, bool guessed, char* win, char* lost);
 void input(int mistakes, char* hint, char& citit);
 void logic(char* word, char citit, char* save, char* alph, int& indexLitera, int& mistakes);
 
@@ -32,7 +32,11 @@ const int POSL_SENT2=16;
 const int POSC_SENT2=9;
 const int POSL_SAVE=19;
 const int POSC_SAVE=12;
-const int POSL_GUESSED=22;
+const int POSL_CITIT=22;
+const int POSL_WIN=27;
+const int POSC_WIN=3;
+const int POSL_LOST=24;
+const int POSC_LOST=7;
 
 char matrice[HEIGHT][WIDTH];
 char drawing[NR_DESENE][HEIGHT_DESEN][WIDTH_DESEN];
@@ -106,6 +110,8 @@ void hangman2(){
     char sent1[]="Available letters";
     char sent2[]="Your word is";
     char alph[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char win[]="You have guessed the word!";
+    char lost[]="You have lost";
     int alphLength=strlen(alph);
     int k=0;
     bool guessed=false;
@@ -115,16 +121,16 @@ void hangman2(){
 
     char citit=' ';
     int indexLitera=-1;
-    while(!guessed && mistakes<6){
-        draw(mistakes, sent1, alph, sent2, save, indexLitera, citit, negative, affirmative, word, guessed);
+    while(1){
+        draw(mistakes, sent1, alph, sent2, save, indexLitera, citit, negative, affirmative, word, guessed, win, lost);
         input(mistakes, hint, citit);
         logic(word, citit, save, alph, indexLitera, mistakes);
-        //TODO: put this code in draw
-        
+        if(mistakes==6)
+            break;
+        else if(guessed)
+            break;
     }
-    if(mistakes==6){
-        cout<<endl<<"You have lost the game.";
-    }
+    
 }
 
 int strpoz(char* str, char lit){
@@ -136,7 +142,8 @@ int strpoz(char* str, char lit){
     return -1;
 }
 
-void draw(int mistakes, char* sent1, char* alph, char* sent2, char* save, int indexLitera, char citit, char* negative, char* affirmative, char*word, bool guessed){
+void draw(int mistakes, char* sent1, char* alph, char* sent2, char* save, int indexLitera, char citit, char* negative, char* affirmative, char*word, bool guessed, char* win, char* lost){
+    // system("cls");
     for(int i=0; i<HEIGHT; i++)
         for(int j=0; j<WIDTH; j++)
             matrice[i][j]=' ';
@@ -154,13 +161,15 @@ void draw(int mistakes, char* sent1, char* alph, char* sent2, char* save, int in
     strcpy(&matrice[POSL_SENT2][POSC_SENT2], sent2);
     strcpy(&matrice[POSL_SAVE][POSC_SAVE], save);
     if(indexLitera!=-1){
-        matrice[POSL_GUESSED][indexLitera]=citit; 
-        strcpy(&matrice[POSL_GUESSED][indexLitera+1], indexLitera==2?negative:affirmative);
+        matrice[POSL_CITIT][indexLitera]=citit; 
+        strcpy(&matrice[POSL_CITIT][indexLitera+1], indexLitera==2?negative:affirmative);
     }
     if(strchr(save, '_')==NULL){
-        cout<<endl<<"You have guessed the word "<<word<<" !";
         guessed=true;
+        strcpy(&matrice[POSL_WIN][POSC_WIN], win);
     }
+    if(mistakes==6)
+        strcpy(&matrice[POSL_LOST][POSC_LOST], lost); 
     for(int i=0; i<HEIGHT; i++){
         for(int j=0; j<WIDTH; j++)
             cout<<matrice[i][j]<<" ";
